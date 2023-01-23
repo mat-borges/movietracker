@@ -1,13 +1,19 @@
 import express, { json } from "express";
 
+import { authRouter } from "./routers/authRouter.js";
 import cors from "cors";
 import dotenv from "dotenv";
+import { stripHtml } from "string-strip-html";
+
+export const cleanStringData = (string: any) => stripHtml(JSON.stringify(string)?.replace(/"|"/gi, ``)).result.trim();
 
 dotenv.config();
 
-const app = express();
+const server = express();
 
-app.use(cors()).use(json());
+server.use(cors()).use(json());
 
-const port = process.env.PORT;
-app.listen(port, () => console.log(`Running server on http://locahost:${port}`));
+server.use(authRouter);
+
+const port: string = String(process.env.PORT);
+server.listen(port, () => console.log(`Running server on http://locahost:${port}`));

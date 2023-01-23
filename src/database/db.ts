@@ -1,9 +1,13 @@
-import pg, { Pool } from 'pg';
+import pg from "pg";
 
-export const connection: Pool = new pg.Pool({
-  user: 'postgres',
-  password: 'naolembro',
-  host: 'localhost',
-  port: 5432,
-  database: 'teste',
-});
+const { Pool } = pg;
+
+// export const connection: Pool = new Pool({
+//   user: process.env.PGUSER,
+//   password: process.env.PGPASSWORD,
+//   host: process.env.PGHOST,
+//   port: Number(process.env.PGPORT),
+//   database: process.env.PGUDATABASE,
+// });
+
+export const connection: pg.Pool = new Pool({ connectionString: process.env.DATABASE_URL });
