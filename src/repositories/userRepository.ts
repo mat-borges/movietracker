@@ -6,7 +6,7 @@ async function registerUser(name: string, email: string, password: string): Prom
   return connection.query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`, [name, email, password]);
 }
 
-async function checkEmail(email: string): Promise<QueryResult<any>> {
+async function checkEmail(email: string): Promise<QueryResult<User>> {
   return connection.query(`SELECT * FROM users WHERE email=$1`, [email]);
 }
 
