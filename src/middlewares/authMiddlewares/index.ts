@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { signInSchema, signUpSchema } from "../../schemas/userSchema.js";
 
 import { NextFunction } from "express";
 import bcrypt from "bcrypt";
 import { cleanStringData } from "../../server.js";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
 import sessionRepository from "../../repositories/sessionRepository.js";
 import userRepository from "../../repositories/userRepository.js";
 
@@ -128,13 +128,10 @@ export async function validateToken(req: Request, res: Response, next: NextFunct
   }
 
   const token: string = authorization?.replace(`Bearer `, ``);
-
   try {
-    const jwtVerification = jwt.verify(token, String(process.env.SECRET));
-    console.log(jwtVerification);
-    // const { user_id, name, email } = jwtVerification;
+    const { user_id, name, email } = jwt.verify(token, String(process.env.JWT_SECRET)) as JwtPayload;
     res.locals.token = token;
-    // res.locals.user = { user_id, name, email };
+    res.locals.user = { user_id, name, email };
     next();
   } catch (err) {
     console.log(err);
